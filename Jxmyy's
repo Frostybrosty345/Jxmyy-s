@@ -15,10 +15,15 @@ panel.Parent = menu
 local label = Instance.new("TextLabel")  
 label.Text = "Jxmyy's Grow a Garden"  
 label.Parent = panel  
+local function createButton(text, callback)  
 local button = Instance.new("TextButton")  
-button.Text = "Plant Seed"  
+button.Text = text  
 button.Parent = panel  
-button.MouseButton1Click:Connect(function()  
+button.MouseButton1Click:Connect(callback)  
+return button  
+end
+
+local button = createButton("Plant Seed", function()  
 local seed = Instance.new("Part")  
 seed.Name = "Seed"  
 seed.Color = Color3.new(1, 0, 0)  
@@ -27,24 +32,15 @@ seed.Anchored = true
 seed.Parent = garden  
 end)
 
-local button = Instance.new("TextButton")  
-button.Text = "Water Plants"  
-button.Parent = panel  
-button.MouseButton1Click:Connect(function()  
+local button = createButton("Water Plants", function()  
 waterPlants()  
 end)
 
-local button = Instance.new("TextButton")  
-button.Text = "Fertilize Plants"  
-button.Parent = panel  
-button.MouseButton1Click:Connect(function()  
+local button = createButton("Fertilize Plants", function()  
 fertilizePlants()  
 end)
 
-local button = Instance.new("TextButton")  
-button.Text = "Harvest Plant"  
-button.Parent = panel  
-button.MouseButton1Click:Connect(function()  
+local button = createButton("Harvest Plant", function()  
 harvestPlant()  
 end)
 
