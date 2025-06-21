@@ -1,0 +1,116 @@
+-- Jxmyy's Grow a Garden Script
+
+-- Variables  
+local garden = script.Parent  
+local seeds = {}  
+local plants = {}  
+local waterSource = nil  
+local fertilizerSource = nil
+
+-- Menu  
+local menu = Instance.new("ScreenGui")  
+menu.Parent = game.Players.LocalPlayer.PlayerGui  
+local panel = Instance.new("Frame")  
+panel.Parent = menu  
+local label = Instance.new("TextLabel")  
+label.Text = "Jxmyy's Grow a Garden"  
+label.Parent = panel  
+local button = Instance.new("TextButton")  
+button.Text = "Plant Seed"  
+button.Parent = panel  
+button.MouseButton1Click:Connect(function()  
+local seed = Instance.new("Part")  
+seed.Name = "Seed"  
+seed.Color = Color3.new(1, 0, 0)  
+seed.Texture = "rbxassetid://"  
+seed.Anchored = true  
+seed.Parent = garden  
+end)
+
+local button = Instance.new("TextButton")  
+button.Text = "Water Plants"  
+button.Parent = panel  
+button.MouseButton1Click:Connect(function()  
+waterPlants()  
+end)
+
+local button = Instance.new("TextButton")  
+button.Text = "Fertilize Plants"  
+button.Parent = panel  
+button.MouseButton1Click:Connect(function()  
+fertilizePlants()  
+end)
+
+local button = Instance.new("TextButton")  
+button.Text = "Harvest Plant"  
+button.Parent = panel  
+button.MouseButton1Click:Connect(function()  
+harvestPlant()  
+end)
+
+-- Functions  
+local function createSeed(name, color, texture)  
+local seed = Instance.new("Part")  
+seed.Name = name  
+seed.Color = color  
+seed.Texture = texture  
+seed.Anchored = true  
+seed.Parent = garden  
+table.insert(seeds, seed)  
+end
+
+local function createPlant(seed)  
+local plant = Instance.new("Part")  
+plant.Name = "Plant"  
+plant.Color = seed.Color  
+plant.Texture = seed.Texture  
+plant.Anchored = true  
+plant.Parent = garden  
+table.insert(plants, plant)  
+end
+
+local function waterPlants()  
+for i, plant in pairs(plants) do  
+if plant:FindFirstChild("Water") then  
+plant.Water.Value = plant.Water.Value + 10  
+end  
+end  
+end
+
+local function fertilizePlants()  
+for i, plant in pairs(plants) do  
+if plant:FindFirstChild("Fertilizer") then  
+plant.Fertilizer.Value = plant.Fertilizer.Value + 10  
+end  
+end  
+end
+
+local function harvestPlant()  
+for i, plant in pairs(plants) do  
+if plant:FindFirstChild("Mature") then  
+plant:Destroy()  
+table.remove(plants, plant)  
+end  
+end  
+end
+
+-- Events  
+garden.ChildAdded:Connect(function(child)  
+if child:IsA("Part") then  
+if child.Name == "Seed" then  
+createPlant(child)  
+elseif child.Name == "Water" then  
+waterSource = child  
+end  
+elseif child.Name == "Fertilizer" then  
+fertilizerSource = child  
+end  
+end)
+
+garden.ChildRemoved:Connect(function(child)  
+if child:IsA("Part") then  
+if child.Name == "Plant" then  
+harvestPlant()  
+end  
+end)  
+end)  
